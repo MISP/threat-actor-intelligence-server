@@ -24,8 +24,19 @@ class Query(tornado.web.RequestHandler):
                result.append(tai_full[uuid])
         return self.write("{}".format(json.dumps(result)))
 
+class Get(tornado.web.RequestHandler):
+
+    def get(self, uuid):
+        if uuid in tai_full:
+           result = tai_full[uuid]
+        else:
+           result = {'error': 'UUID is not known in the MISP galaxy threat-actor'}
+        return self.write("{}".format(json.dumps(result)))
+
+
 application = tornado.web.Application([
-    (r"/query", Query)
+    (r"/query", Query),
+    (r"/get/(.*)", Get)
 ])
 
 if not (os.path.exists('../misp-galaxy/clusters/threat-actor.json')):
