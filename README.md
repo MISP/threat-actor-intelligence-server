@@ -28,14 +28,20 @@ By the default, the server is listening on TCP port 8889.
  
 # API and public API
 
-The API is simple and can be queried on the `/query` entry point by POSTing a simple querty in JSON format. The query format can
-be composed of a `name` as key or `uuid` as key. The output format is a JSON in the [MISP standard galaxy format](https://www.misp-standard.org/rfc/misp-standard-galaxy-format.txt). 
+The API is simple and can be queried on the `/query` entry point by POSTing a simple query in JSON format. The query format is 
+composed of an `name` as key or an `uuid` as key. The output format is a JSON in the [MISP standard galaxy format](https://www.misp-standard.org/rfc/misp-standard-galaxy-format.txt). 
 
-A public API is available at the following location `https://www.misp-project.org/tai/` and can be queried to gather the latest information about threat-actors.
+Query such as `{"name":"APT34"}` or `{"name":"Sofacy"}` does the search on the name or potential synonyms.
 
-## Example to query a threat-actor by name
+There is also a simple GET entry point `/get/<UUID>` entry point followed by the UUID of the threat-actor.
 
-~~~
+- [https://www.misp-project.org/tai/get/103ebfd8-4280-4027-b61a-69bd9967ad6c](https://www.misp-project.org/tai/get/103ebfd8-4280-4027-b61a-69bd9967ad6c) which returns the entries for a specific threat-actor.
+
+A public API is available at the following url `https://www.misp-project.org/tai/` and can be queried to gather the latest information about threat-actors.
+
+## Example using curl 
+
+~~~json
 curl --silent -d '{"name":"APT34"}' -H "Content-Type: application/json" -X POST https://www.misp-project.org/tai/query | jq . 
 [
   {
@@ -79,7 +85,7 @@ curl --silent -d '{"name":"APT34"}' -H "Content-Type: application/json" -X POST 
 
 ## Example to query a threat-actor by UUID
 
-~~~
+~~~json
 curl --silent -d '{"uuid":"0286e80e-b0ed-464f-ad62-beec8536d0cb"}' -H "Content-Type: application/json" -X POST https://www.misp-project.org/tai/query  | jq .
 {
   "description": "We have investigated their intrusions since 2013 and have been battling them nonstop over the last year at several large telecommunications and technology companies. The determination of this China-based adversary is truly impressive: they are like a dog with a bone.\nHURRICANE PANDA’s preferred initial vector of compromise and persistence is a China Chopper webshell – a tiny and easily obfuscated 70 byte text file that consists of an ‘eval()’ command, which is then used to provide full command execution and file upload/download capabilities to the attackers. This script is typically uploaded to a web server via a SQL injection or WebDAV vulnerability, which is often trivial to uncover in a company with a large external web presence.\nOnce inside, the adversary immediately moves on to execution of a credential theft tool such as Mimikatz (repacked to avoid AV detection). If they are lucky to have caught an administrator who might be logged into that web server at the time, they will have gained domain administrator credentials and can now roam your network at will via ‘net use’ and ‘wmic’ commands executed through the webshell terminal.",
