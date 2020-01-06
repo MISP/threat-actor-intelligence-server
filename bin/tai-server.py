@@ -8,6 +8,11 @@ import json
 
 class Query(tornado.web.RequestHandler):
 
+    def prepare(self):
+        header = "Content-Type"
+        body = "application/json"
+        self.set_header(header, body)
+
     def post(self):
         query = json_decode(self.request.body)
         if 'uuid' in query:
@@ -25,6 +30,11 @@ class Query(tornado.web.RequestHandler):
         return self.write("{}".format(json.dumps(result)))
 
 class Get(tornado.web.RequestHandler):
+
+    def prepare(self):
+        header = "Content-Type"
+        body = "application/json"
+        self.set_header(header, body)
 
     def get(self, uuid):
         if uuid in tai_full:
