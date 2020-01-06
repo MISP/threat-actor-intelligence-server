@@ -1,0 +1,3 @@
+[submodule "misp-galaxy"]
+	path = misp-galaxy
+	url = https://github.com/MISP/misp-galaxy.git
