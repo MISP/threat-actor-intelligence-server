@@ -15,6 +15,8 @@ class Query(tornado.web.RequestHandler):
 
     def post(self):
         query = json_decode(self.request.body)
+        if not ('uuid' in query or 'name' in query):
+            return self.write(json.dumps("'error': 'Incorrect query format'"))
         if 'uuid' in query:
            if query['uuid'] in tai_full:
               result = tai_full[query['uuid']]
