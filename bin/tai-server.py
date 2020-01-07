@@ -17,6 +17,7 @@ class Query(tornado.web.RequestHandler):
         query = json_decode(self.request.body)
         if not ('uuid' in query or 'name' in query):
             return self.write(json.dumps("'error': 'Incorrect query format'"))
+        user_agent = self.request.headers["User-Agent"]
         if 'uuid' in query:
            if query['uuid'] in tai_full:
               result = tai_full[query['uuid']]
@@ -29,6 +30,7 @@ class Query(tornado.web.RequestHandler):
            for uuid in tai_names[query['name'].lower()]:
                result = []
                result.append(tai_full[uuid])
+        print("Query {} from {}".format(query, user_agent))
         return self.write("{}".format(json.dumps(result)))
 
 class Get(tornado.web.RequestHandler):
@@ -75,6 +77,4 @@ for threat_actor in threat_actors['values']:
 if __name__ == "__main__":
     application.listen(8889)
     tornado.ioloop.IOLoop.instance().start()
-
-
 
