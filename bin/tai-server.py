@@ -16,7 +16,7 @@ class Query(tornado.web.RequestHandler):
 
     def post(self):
         query = json_decode(self.request.body)
-        if not ('uuid' in query or 'name' in query):
+        if not ('uuid' in query or 'name' in query or 'country' in query):
             return self.write(json.dumps("'error': 'Incorrect query format'"))
         user_agent = self.request.headers["User-Agent"]
         if 'uuid' in query:
@@ -28,9 +28,14 @@ class Query(tornado.web.RequestHandler):
            if query['name'].lower() not in tai_names:
               result = {'error': 'Name or synomym is not known in the MISP galaxy threat-actor'}
               return self.write("{}".format(json.dumps(result)))
+           result = []
            for uuid in tai_names[query['name'].lower()]:
-               result = []
                result.append(tai_full[uuid])
+        if 'country' in query:
+            ta = tai_country[query['country'].lower()]
+            result = []
+            for uuid in tai_country[query['country'].lower()]:
+                result.append(tai_full[uuid])
         print("Query {} from {}".format(query, user_agent))
         return self.write("{}".format(json.dumps(result)))
 
@@ -68,6 +73,7 @@ with open('../misp-galaxy/clusters/threat-actor.json', 'rb') as galaxyta:
 tai_full = {}
 tai_names = {}
 tai_info = {}
+tai_country = {}
 
 tai_info['version'] = threat_actors['version']
 tai_info['number_actors'] = 0
@@ -86,7 +92,10 @@ for threat_actor in threat_actors['values']:
                       tai_names[synonym.lower()] = []
                   tai_names[synonym.lower()].append(threat_actor['uuid'])
                   tai_info['number_synonyms'] += 1
-
+           if 'country' in threat_actor['meta']:
+              if not threat_actor['meta']['country'].lower() in tai_country:
+                  tai_country[threat_actor['meta']['country'].lower()] = []
+              tai_country[threat_actor['meta']['country'].lower()].append(threat_actor['uuid'])
 
 if __name__ == "__main__":
     application.listen(8889)
