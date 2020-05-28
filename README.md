@@ -27,7 +27,7 @@ python tai-server.py
 ~~~
 
 By the default, the server is listening on TCP port 8889.
- 
+
 # API and public API
 
 The API is simple and can be queried on the `/query` entry point by POSTing a simple query in JSON format. The query format is 
@@ -81,6 +81,58 @@ curl --silent -d '{"name":"APT34"}' -H "Content-Type: application/json" -X POST 
     ],
     "uuid": "73a521f6-3bc7-11e8-9e30-df7c90e50dda",
     "value": "APT34"
+  }
+]
+~~~
+## Example to query threat-actors by country
+
+~~~json
+curl --silent -d '{"country":"FR"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:8889/query | jq .
+[
+  {
+    "description": "In 2014, researchers at Kaspersky Lab discovered and reported on three zero-days that were being used in cyberattacks in the wild. Two of these zero-day vulnerabilities are associated with an advanced threat actor we call Animal Farm. Over the past few years, Animal Farm has targeted a wide range of global organizations. The group has been active since at least 2009 and there are signs that earlier malware versions  were developed as far back as 2007.",
+    "meta": {
+      "attribution-confidence": "50",
+      "cfr-suspected-state-sponsor": "France",
+      "cfr-suspected-victims": [
+        "Syria",
+        "United States",
+        "Netherlands",
+        "Russia",
+        "Spain",
+        "Iran",
+        "China",
+        "Germany",
+        "Algeria",
+        "Norway",
+        "Malaysia",
+        "Turkey",
+        "United Kingdom",
+        "Ivory Coast",
+        "Greece"
+      ],
+      "cfr-target-category": [
+        "Government",
+        "Private sector"
+      ],
+      "cfr-type-of-incident": "Espionage",
+      "country": "FR",
+      "refs": [
+        "https://securelist.com/blog/research/69114/animals-in-the-apt-farm/",
+        "https://motherboard.vice.com/read/meet-babar-a-new-malware-almost-certainly-created-by-france",
+        "http://www.cyphort.com/evilbunny-malware-instrumented-lua/",
+        "http://www.cyphort.com/babar-suspected-nation-state-spyware-spotlight/",
+        "https://www.gdatasoftware.com/blog/2015/02/24270-babar-espionage-software-finally-found-and-put-under-the-microscope",
+        "https://www.cfr.org/interactive/cyber-operations/snowglobe",
+        "https://resources.infosecinstitute.com/animal-farm-apt-and-the-shadow-of-france-intelligence/"
+      ],
+      "synonyms": [
+        "Animal Farm",
+        "Snowglobe"
+      ]
+    },
+    "uuid": "3b8e7462-c83f-4e7d-9511-2fe430d80aab",
+    "value": "SNOWGLOBE"
   }
 ]
 ~~~
