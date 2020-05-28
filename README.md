@@ -87,7 +87,7 @@ curl --silent -d '{"name":"APT34"}' -H "Content-Type: application/json" -X POST 
 ## Example to query threat-actors by country
 
 ~~~json
-curl --silent -d '{"country":"FR"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:8889/query | jq .
+curl --silent -d '{"country":"FR"}' -H "Content-Type: application/json" -X POST https://www.misp-project.org/tai/query | jq .
 [
   {
     "description": "In 2014, researchers at Kaspersky Lab discovered and reported on three zero-days that were being used in cyberattacks in the wild. Two of these zero-day vulnerabilities are associated with an advanced threat actor we call Animal Farm. Over the past few years, Animal Farm has targeted a wide range of global organizations. The group has been active since at least 2009 and there are signs that earlier malware versions  were developed as far back as 2007.",
