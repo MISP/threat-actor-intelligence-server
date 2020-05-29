@@ -32,12 +32,16 @@ class Query(tornado.web.RequestHandler):
            for uuid in tai_names[query['name'].lower()]:
                result.append(tai_full[uuid])
         if 'country' in query:
-            ta = tai_country[query['country'].lower()]
-            result = []
-            for uuid in tai_country[query['country'].lower()]:
-                result.append(tai_full[uuid])
+            if query['country'].lower() in tai_country:
+               ta = tai_country[query['country'].lower()]
+               result = []
+               for uuid in tai_country[query['country'].lower()]:
+                   result.append(tai_full[uuid])
+            else:
+                result = {'error': 'Not existing country in the MISP galaxy threat-actor'}
         print("Query {} from {}".format(query, user_agent))
         return self.write("{}".format(json.dumps(result)))
+
 
 class Get(tornado.web.RequestHandler):
 
