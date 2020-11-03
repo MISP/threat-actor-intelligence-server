@@ -18,6 +18,14 @@ git submodule init
 git submodule update
 pip install -r REQUIREMENTS
 ~~~
+## Starting the server
+
+~~~
+cd bin
+python tai-server.py
+~~~
+
+By the default, the server is listening on TCP port 8889.
 
 # Alternative Installation
 
@@ -27,6 +35,7 @@ This method involves:
  - creating a python virtual environment
  - installation of TAI
  - systemd configuraion of (arbitrarily) four instances
+ - configuring nginx as a reverse proxy to four instances
 
 Installing a few dependencies
 ~~~
@@ -59,15 +68,19 @@ sudo cp /home/tai/threat-actor-intelligence-server/debian/tai.target /etc/system
 sudo systemctl daemon-reload
 ~~~
 
-
-# Starting the server
-
+configuring nginx as a reverse proxy to four instances
 ~~~
-cd bin
-python tai-server.py
+sudo rm /etc/nginx/site-enabled/default
+sudo cp /home/tai/threat-actor-intelligence-server/debian/nginx-tai.conf /etc/nginx/sites-available/
+sudo ln -s /etc/nginx/sites-available/nginx-tai.conf /etc/nginx/sites-enabled/
 ~~~
 
-By the default, the server is listening on TCP port 8889.
+Lastly, configure systemd to start the TAI servers and nginx automatically
+~~~
+sudo systemctl enable tai.target
+sudo systemctl enable nginx
+~~~
+
 
 # API and public API
 
