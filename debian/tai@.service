@@ -1,0 +1,13 @@
+[Unit]
+Description=Threat Actor Intelligence Server
+PartOf=tai.target
+
+[Service]
+WorkingDirectory=/home/tai/threat-actor-intelligence-server/bin
+ExecStart=/home/tai/tai-env/bin/python3 tai-server.py --port=%I --address='127.0.0.1'
+User=tai
+Restart=on-failure
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
