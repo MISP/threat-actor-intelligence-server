@@ -1,11 +1,16 @@
 
 import tornado.ioloop
 import tornado.web
+
 from tornado.escape import json_decode, json_encode
+from tornado.options import define, options
 import os.path
 import sys
 import json
 import datetime
+
+define('port', default=8889, help='port to listen on')
+define('address', default='0.0.0.0', help='address to listen on')
 
 class Query(tornado.web.RequestHandler):
 
@@ -102,6 +107,6 @@ for threat_actor in threat_actors['values']:
               tai_country[threat_actor['meta']['country'].lower()].append(threat_actor['uuid'])
 
 if __name__ == "__main__":
-    application.listen(8889)
+    tornado.options.parse_command_line()
+    application.listen(options.port, address=options.address)
     tornado.ioloop.IOLoop.instance().start()
-
