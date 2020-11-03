@@ -47,11 +47,15 @@ Create a dedicated, unprivileged, user to run the TAI server(s)
 sudo adduser tai
 ~~~
 
-Two steps together; creating a python virtual environment _and_ installation of TAI
+Create and activate a python virtual environment called _tai-env_
 ~~~
 sudo su tai 
 virtualenv tai-env
 source ./tai-env/bin/activate
+~~~
+
+Installation of TAI in the home directory of the user `tai`
+~~~
 cd
 git clone https://github.com/MISP/threat-actor-intelligence-server
 cd threat-actor-intelligence-server
