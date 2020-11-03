@@ -19,6 +19,47 @@ git submodule update
 pip install -r REQUIREMENTS
 ~~~
 
+# Alternative Installation
+
+This method involves:
+ - installing a few dependencies
+ - creating a dedicated, unprivileged, user to run the TAI server(s)
+ - creating a python virtual environment
+ - installation of TAI
+ - systemd configuraion of (arbitrarily) four instances
+
+Installing a few dependencies
+~~~
+sudo apt install virtualenv git python3-pip
+~~~
+
+Create a dedicated, unprivileged, user to run the TAI server(s)
+~~~
+sudo adduser tai
+~~~
+
+Two steps together; creating a python virtual environment _and_ installation of TAI
+~~~
+sudo su tai 
+virtualenv tai-env
+source ./tai-env/bin/activate
+cd
+git clone https://github.com/MISP/threat-actor-intelligence-server
+cd threat-actor-intelligence-server
+git submodule init
+git submodule update
+pip install -r REQUIREMENTS
+exit
+~~~
+
+systemd configuraion for a group of four instances of TAI
+~~~
+sudo cp /home/tai/threat-actor-intelligence-server/debian/tai@.service /lib/systemd/system/
+sudo cp /home/tai/threat-actor-intelligence-server/debian/tai.target /etc/systemd/system/
+sudo systemctl daemon-reload
+~~~
+
+
 # Starting the server
 
 ~~~
