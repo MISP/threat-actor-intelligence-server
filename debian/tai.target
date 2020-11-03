@@ -1,0 +1,6 @@
+Unit]
+Description=TAI Servers
+Requires=tai@8000.service tai@8001.service tai@8002.service tai@8003.service
+
+[Install]
+WantedBy=multi-user.target
