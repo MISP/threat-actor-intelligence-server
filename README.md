@@ -30,7 +30,7 @@ This method involves:
 
 Installing a few dependencies
 ~~~
-sudo apt install virtualenv git python3-pip
+sudo apt install virtualenv git python3-pip nginx
 ~~~
 
 Create a dedicated, unprivileged, user to run the TAI server(s)
