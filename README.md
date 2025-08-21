@@ -1,6 +1,6 @@
 # threat-actor-intelligence-server
 
-![](https://raw.githubusercontent.com/MISP/threat-actor-intelligence-server/master/doc/logo/tai.png)
+![](https://raw.githubusercontent.com/MISP/threat-actor-intelligence-server/main/doc/logo/tai.png)
 
 A simple ReST server to lookup threat actors (by name, synonym or UUID) and returning the corresponding MISP galaxy information about the known threat actors.
 
