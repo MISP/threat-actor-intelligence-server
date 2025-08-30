@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>TAIS API Docs</title>
+    <link rel="stylesheet" href="./css/swagger-ui.css" />
+  </head>
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="./js/swagger-ui-bundle.js"></script>
+    <script>
+      window.onload = () => {
+        SwaggerUIBundle({
+  url: "openapi.yaml",
+  dom_id: "#swagger-ui"
+});
+      }
+    </script>
+  </body>
+</html>

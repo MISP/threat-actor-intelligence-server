@@ -12,6 +12,8 @@ import datetime
 define('port', default=8889, help='port to listen on')
 define('address', default='0.0.0.0', help='address to listen on')
 
+web_dir = os.path.join(os.path.dirname(__file__), "..", "web")
+
 class Query(tornado.web.RequestHandler):
 
     def prepare(self):
@@ -70,7 +72,10 @@ class Info(tornado.web.RequestHandler):
 application = tornado.web.Application([
     (r"/query", Query),
     (r"/get/(.*)", Get),
-    (r"/info", Info)
+    (r"/info", Info),
+
+    # Static handler: serve web/ at app root
+    (r"/(.*)", tornado.web.StaticFileHandler, {"path": web_dir, "default_filename": "index.html"}),
 ])
 
 if not (os.path.exists('../misp-galaxy/clusters/threat-actor.json')):

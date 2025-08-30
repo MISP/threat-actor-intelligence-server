@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Threat Actor Intelligence UI</title>
+  <link href="css/ribbon.css" rel="stylesheet">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <img class="ms-3" src="img/logo-w.svg" style="height:48px;" alt="TAI">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Threat Actor Intelligence</a>
+    </div>
+    <div class="corner-ribbon top-right sticky bg-light shadow">
+        <a href="https://github.com/MISP/threat-actor-intelligence-server">Project page</a>
+    </div>
+  </nav>
+
+  <div class="container py-4 flex-grow-1 mb-5">
+    <h1 class="mb-4">Web Client</h1>
+
+    <!-- Query form -->
+    <form class="row g-3" onsubmit="run(); return false;">
+      <div class="col-md-4">
+        <label for="mode" class="form-label">Query Type</label>
+        <select id="mode" class="form-select">
+          <option value="name">Name / synonym</option>
+          <option value="uuid">UUID (POST)</option>
+          <option value="uuid_get">UUID (GET)</option>
+          <option value="country">Country (2-letter)</option>
+        </select>
+      </div>
+
+      <div class="col-md-8">
+        <label for="q" class="form-label">Query</label>
+        <input type="text" id="q" class="form-control" placeholder="e.g., APT34">
+      </div>
+
+      <div class="col-12">
+        <button class="btn btn-primary">Run query</button>
+        <button type="button" class="btn btn-secondary" onclick="exportJSON()" disabled id="exportBtn">Export JSON</button>
+      </div>
+    </form>
+
+    <!-- Results -->
+    <div id="results" class="mt-4"></div>
+  </div>
+  <footer class="bg-dark text-light border-top py-3 fixed-bottom">
+    <div class="container text-center">
+      <small>
+        <a href="https://www.misp-project.org/" class="text-light text-decoration-none mx-2" target="_blank">MISP Project</a>
+        ·
+        <a href="https://misp.github.io/threat-actor-intelligence-server/" class="text-light text-decoration-none mx-2" target="_blank">Docs</a>
+        ·
+        <a href="swagger.html" class="text-light text-decoration-none mx-2">API</a>
+        ·
+        <a href="https://github.com/MISP/threat-actor-intelligence-server/" class="text-light text-decoration-none mx-2" target="_blank">GitHub</a>
+      </small>
+    </div>
+  </footer>
+  <script src="js/tai.js"></script>
+</body>
+</html>

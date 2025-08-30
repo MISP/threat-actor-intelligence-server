@@ -1,0 +1,242 @@
+openapi: 3.0.3
+info:
+  title: Threat Actor Intelligence Server API
+  description: |
+    The Threat Actor Intelligence Server (TAIS) provides a REST interface to lookup
+    threat actors (by name, synonym, or UUID) and returns the corresponding
+    MISP Galaxy cluster information. See the official README for usage examples.
+  version: 1.0.0
+  license:
+    name: AGPL-3.0
+    url: https://www.gnu.org/licenses/agpl-3.0.en.html
+servers:
+  - url: /
+    description: Default TAIS server
+  - url: https://www.misp-project.org/tai
+    description: Public TAIS instance
+
+paths:
+  /query:
+    post:
+      summary: Query threat actor data
+      description: |
+        Submit a JSON object with one of the following fields:
+        - `name`: search by name or synonym (e.g., `"APT34"`, `"Sofacy"`)
+        - `uuid`: exact UUID search
+        - `country`: 2-letter country code (e.g., `"FR"`)
+
+        Returns results in MISP Galaxy format as seen in the official README.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  properties:
+                    name:
+                      type: string
+                  required: [name]
+                - type: object
+                  properties:
+                    uuid:
+                      type: string
+                  required: [uuid]
+                - type: object
+                  properties:
+                    country:
+                      type: string
+                      description: Two-letter ISO country code
+                  required: [country]
+            examples:
+              byName:
+                summary: "Query by name (APT34)"
+                value:
+                  name: "APT34"
+              byNameAlt:
+                summary: "Query by name synonym (Sofacy)"
+                value:
+                  name: "Sofacy"
+              byCountry:
+                summary: "Query by country (FR)"
+                value:
+                  country: "FR"
+              byUUID:
+                summary: "Query by UUID (Hurricane Panda)"
+                value:
+                  uuid: "0286e80e-b0ed-464f-ad62-beec8536d0cb"
+      responses:
+        '200':
+          description: |
+            Returns an array of matching actor clusters for name/country queries,
+            or a single cluster for a UUID query.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Actor'
+                  - $ref: '#/components/schemas/Actor'
+              examples:
+                exampleByName: 
+                  summary: APT34 (multiple results)
+                  value:
+                    - uuid: "73a521f6-3bc7-11e8-9e30-df7c90e50dda"
+                      value: "APT34"
+                      description: |
+                        Since at least 2014, an Iranian threat group tracked by
+                        FireEye as APT34 has conducted reconnaissance aligned
+                        with the strategic interests of Iran...
+                      meta:
+                        attribution-confidence: "50"
+                        cfr-suspected-state-sponsor: "Iran (Islamic Republic of)"
+                        cfr-suspected-victims:
+                          - "Middle East"
+                        cfr-target-category:
+                          - "Government"
+                          - "Private sector"
+                        cfr-type-of-incident: "Espionage"
+                        country: "IR"
+                        refs:
+                          - "https://www.fireeye.com/content/dam/collateral/en/mtrends-2018.pdf"
+                          - "https://www.wired.com/story/apt-34-iranian-hackers-critical-infrastructure-companies/"
+                          - "https://www.fireeye.com/blog/threat-research/2017/12/targeted-attack-in-middle-east-by-apt34.html"
+                          - "https://www.cfr.org/interactive/cyber-operations/apt-34"
+                        synonyms:
+                          - "APT 34"
+                    - uuid: "3b8e7462-c83f-4e7d-9511-2fe430d80aab"
+                      value: "SNOWGLOBE"
+                      description: |
+                        In 2014, researchers at Kaspersky Lab discovered and
+                        reported on three zero-days… Animal Farm…
+                      meta:
+                        attribution-confidence: "50"
+                        cfr-suspected-state-sponsor: "France"
+                        cfr-suspected-victims:
+                          - "Syria"
+                          - "United States"
+                          - "Netherlands"
+                          - "Russia"
+                          - "Spain"
+                          - "Iran"
+                          - "China"
+                          - "Germany"
+                          - "Algeria"
+                          - "Norway"
+                          - "Malaysia"
+                          - "Turkey"
+                          - "United Kingdom"
+                          - "Ivory Coast"
+                          - "Greece"
+                        cfr-target-category:
+                          - "Government"
+                          - "Private sector"
+                        cfr-type-of-incident: "Espionage"
+                        country: "FR"
+                        refs:
+                          - "https://securelist.com/blog/research/69114/animals-in-the-apt-farm/"
+                          - "https://motherboard.vice.com/read/meet-babar-a-new-malware-almost-certainly-created-by-france"
+                          - "http://www.cyphort.com/evilbunny-malware-instrumented-lua/"
+                          - "http://www.cyphort.com/babar-suspected-nation-state-spyware-spotlight/"
+                          - "https://www.gdatasoftware.com/blog/2015/02/24270-babar-espionage-software-finally-found-and-put-under-the-microscope"
+                          - "https://www.cfr.org/interactive/cyber-operations/snowglobe"
+                          - "https://resources.infosecinstitute.com/animal-farm-apt-and-the-shadow-of-france-intelligence/"
+                        synonyms:
+                          - "Animal Farm"
+                          - "Snowglobe"
+                exampleByUUID:
+                  summary: Hurricane Panda (single result)
+                  value:
+                    uuid: "0286e80e-b0ed-464f-ad62-beec8536d0cb"
+                    value: "Hurricane Panda"
+                    description: |
+                      We have investigated their intrusions since 2013 and have been
+                      battling them nonstop over the last year… like a dog with a bone...
+                    meta:
+                      attribution-confidence: "50"
+                      country: "CN"
+                      refs:
+                        - "http://www.crowdstrike.com/blog/cyber-deterrence-in-action-a-story-of-one-long-hurricane-panda-campaign/"
+                        - "https://blog.confiant.com/uncovering-2017s-largest-malvertising-operation-b84cd38d6b85"
+                        - "https://blog.confiant.com/zirconium-was-one-step-ahead-of-chromes-redirect-blocker-with-0-day-2d61802efd0d"
+                      synonyms:
+                        - "Black Vine"
+                        - "TEMP.Avengers"
+                        - "Zirconium"
+                        - "APT 31"
+                        - "APT31"
+
+  /get/{uuid}:
+    get:
+      summary: Get threat actor by UUID
+      description: Retrieve the MISP galaxy information for a given threat actor UUID.
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          schema:
+            type: string
+          description: UUID of the threat actor (e.g., `"103ebfd8-4280-4027-b61a-69bd9967ad6c"`)
+      responses:
+        '200':
+          description: A single threat actor cluster in MISP Galaxy format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actor'
+              example:
+                uuid: "103ebfd8-4280-4027-b61a-69bd9967ad6c"
+                value: "ExampleActor"
+                description: "Response for the given UUID."
+                meta:
+                  country: "XX"
+                  synonyms: []
+        '404':
+          description: Not found — no actor exists with the given UUID.
+
+components:
+  schemas:
+    Actor:
+      type: object
+      description: MISP Galaxy cluster representation of a threat actor
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: Unique ID for the actor cluster
+        value:
+          type: string
+          description: Name of the actor
+        description:
+          type: string
+          description: Full textual description
+        meta:
+          type: object
+          description: Metadata including synonyms, country, refs, etc.
+          properties:
+            attribution-confidence:
+              type: string
+            cfr-suspected-state-sponsor:
+              type: string
+            cfr-suspected-victims:
+              type: array
+              items:
+                type: string
+            cfr-target-category:
+              type: array
+              items:
+                type: string
+            cfr-type-of-incident:
+              type: string
+            country:
+              type: string
+              description: Two-letter ISO country code
+            refs:
+              type: array
+              items:
+                type: string
+            synonyms:
+              type: array
+              items:
+                type: string
