@@ -85,6 +85,49 @@ sudo systemctl enable tai.target
 sudo systemctl enable nginx
 ~~~
 
+## Docker Installation
+
+You can run the Threat Actor Intelligence Server using Docker for a simplified deployment.
+
+### Prerequisites
+- Install [Docker](https://docs.docker.com/get-docker/).
+~~~bash
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+~~~
+
+### Setup
+
+- **Clone the repository**:
+   ~~~bash
+   git clone https://github.com/MISP/threat-actor-intelligence-server
+   cd threat-actor-intelligence-server
+   ~~~
+
+### Running the Server
+- **Using Docker Compose** (recommended):
+  ~~~bash
+  docker compose up --build -d
+  ~~~
+  This builds and starts the container in detached mode. The server listens on `http://localhost:8889`.
+
+- **Using Docker**:
+  ~~~bash
+  docker build -t threat-actor-intelligence-server .
+  docker run -d -p 8889:8889 threat-actor-intelligence-server
+  ~~~
+
+### Verify
+- Check the container logs to confirm the server started and `threat-actor.json` was found:
+  ~~~bash
+  docker compose logs
+  ~~~
+  or
+  ~~~bash
+  docker logs <container_id>
+  ~~~
+- Test the API at `http://localhost:8889/query` (e.g., `curl -d '{"name":"APT34"}' -H "Content-Type: application/json" -X POST http://localhost:8889/query`).
+
 
 # API and public API
 
